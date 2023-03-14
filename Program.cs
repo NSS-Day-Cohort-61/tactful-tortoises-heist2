@@ -16,12 +16,12 @@ namespace heist
             //  to this list, but for now let's pre-populate the list with 5 or 6 robbers
             //   (give it a mix of Hackers, Lock Specialists, and Muscle).
 
-            Hacker James = new Hacker("James", 30, 30);
-            LockSpecialist Laura = new LockSpecialist("Laura", 20, 20);
+            Hacker James = new Hacker("James", 100, 30);
+            LockSpecialist Laura = new LockSpecialist("Laura", 100, 20);
 
-            Muscle Paul = new Muscle("Paul", 50, 25);
+            Muscle Paul = new Muscle("Paul", 100, 25);
 
-            Hacker Logan = new Hacker("Logan", 40, 10);
+            Hacker Logan = new Hacker("Logan", 30, 10);
             LockSpecialist Will = new LockSpecialist("Will", 30, 10);
             Muscle Jenny = new Muscle("Jenny", 40, 20);
 
@@ -154,15 +154,6 @@ namespace heist
                     break;
                 }
                 crewSelection = int.Parse(crewSelectionResp); //1
-                // foreach(var index in chosenIndexes){
-                //     //check to see if index matches 
-                //     foreach(var rolodexIndex in rolodex){
-
-                //     if (index == ){
-
-                //     }
-                //     }
-                // }
                 crew.Add(rolodex[crewSelection - 1]); //crew [member1]
                 chosenIndexes.Add(crewSelection); // chosenIndexes [1]
                 cutPercentage -= rolodex[crewSelection - 1].PercentageCut;
@@ -173,12 +164,31 @@ namespace heist
 
             foreach (var crewmate in crew)
             {
+                Console.WriteLine("Here is your dumb crew!");
                 Console.WriteLine(crewmate.Name);
             }
-            foreach (var crewmate in chosenIndexes)
-            {
-                Console.WriteLine(crewmate);
+
+            Console.WriteLine("Now the heist begins! Yikes...");
+
+            foreach(var crewmate in crew) {
+                crewmate.PerformSkill(newBank);
             }
+
+            if(newBank.IsSecure) {
+                Console.WriteLine("FAILURE! You losers went all the way to jail.");
+            }
+            else {
+                Console.WriteLine("Okay fine, you robbed a bank. Do you want an award or what?");
+                Console.WriteLine($"The bank had ${newBank.CashOnHand} of ill-gotten loot!");
+                int cashLeft = newBank.CashOnHand;
+                foreach(var crewmate in crew) {
+                    // int cut = Convert.ToInt32(Math.Round((crewmate.PercentageCut / 100.0) * newBank.CashOnHand));
+                    double cut = Math.Round((crewmate.PercentageCut / 100.0) * newBank.CashOnHand);
+                    Console.WriteLine($"{crewmate.Name} took ${cut} of this filthy lucre!");
+                    cashLeft -= Convert.ToInt32((crewmate.PercentageCut / 100.0) * newBank.CashOnHand);
+                }
+            }
+
         }
         //Allow the user to select as many crew members as they'd like from the rolodex
         //Continue to print out the report after each crew member is selected, but the report should not include operatives that have already been added to the crew
