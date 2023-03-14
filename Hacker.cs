@@ -1,18 +1,23 @@
 using System;
 
-namespace heist {
+namespace heist
+{
 
-    public class Hacker : IRobber 
+    public class Hacker : IRobber
     {
         public string Name { get; set; }
         public int SkillLevel { get; set; }
         public int PercentageCut { get; set; }
 
-        public void PerformSkill (Bank bank) 
+        public void PerformSkill(Bank bank)
         {
-            bank.SecurityGuardScore -= SkillLevel;
-            Console.WriteLine( $"{Name} is hacking the alarm System. Decreased security {SkillLevel} points.");
-            Console.WriteLine( $"{Name} has disabled the alarm System");
+            bank.AlarmScore -= SkillLevel;
+            Console.WriteLine($"{Name} is hacking the alarm system. Decreased security {SkillLevel} points.");
+            if (bank.AlarmScore <= 0)
+            {
+                Console.WriteLine($"{Name} has disabled the Alarm");
+            }
         }
-    }    
+    }
+
 }

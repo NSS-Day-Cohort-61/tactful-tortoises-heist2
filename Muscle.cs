@@ -11,8 +11,11 @@ namespace heist {
         public void PerformSkill (Bank bank) 
         {
             bank.SecurityGuardScore -= SkillLevel;
-            Console.WriteLine( $"{Name} is hacking the alarm System. Decreased security {SkillLevel} points.");
-            Console.WriteLine( $"{Name} has disabled the alarm System");
+            Console.WriteLine( $"{Name} is tenderizing the security Guard. Decreased security {SkillLevel} points.");
+            if (bank.SecurityGuardScore <= 0 )
+            {
+                Console.WriteLine( $"{Name} has disabled the Guard");
+            }
         }
     }
 }
