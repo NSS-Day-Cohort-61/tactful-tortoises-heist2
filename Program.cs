@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 
 namespace heist
@@ -27,18 +28,94 @@ namespace heist
                 List<IRobber> rolodex = new List<IRobber>()
                 { James, Laura, Paul, Logan, Will, Jenny };
 
-                Console.WriteLine(rolodex.Count);
-                Console.WriteLine("Who would you like to add to your crew???");
-                string answer = Console.ReadLine();
-                Console.WriteLine("1.) Hacker (Disables alarms) \n2.)Muscle (Disarms guards) \n3.)Lock Specialist (cracks vault)");
-                int answerTwo = int.Parse(Console.ReadLine());
+                
 
         //   When the program starts, print out the number of current operatives in the rolodex. 
         //   Then prompt the user to enter the name of a new possible crew member. 
         //   Once the user has entered a name, print out a list of possible specialties
         //    and have the user select which specialty this operative has. The list should
         //     contain the following options
+                string nameResponse = " ";
+                while(nameResponse.Length > 0) {
+                    Console.WriteLine(rolodex.Count);
+                    Console.WriteLine("Who would you like to add to your crew???");
+                    nameResponse = Console.ReadLine();
+                    if(nameResponse.Length == 0) {
+                        break;
+                    }
+                    Console.WriteLine("1.) Hacker (Disables alarms) \n2.)Muscle (Disarms guards) \n3.)Lock Specialist (cracks vault)");
+                    int roleResponse = int.Parse(Console.ReadLine());
+
+                    Console.WriteLine("Enter this dirty thief's skill level (number between 1 and 100): ");
+                    int skillResponse = int.Parse(Console.ReadLine());
+                    Console.WriteLine("What percentage cut should this lowlife get?: ");
+                    int cutResponse = int.Parse(Console.ReadLine());
+
+                    if(roleResponse == 1) {
+                        Hacker newHacker = new Hacker(nameResponse, skillResponse, cutResponse);
+                        rolodex.Add(newHacker);
+                    }
+                    else if(roleResponse == 2) {
+                        Muscle newMuscle = new Muscle(nameResponse, skillResponse, cutResponse);
+                        rolodex.Add(newMuscle);
+                    }
+                    else if( roleResponse == 3) {
+                        LockSpecialist newLockSpecialist = new LockSpecialist(nameResponse, skillResponse, cutResponse);
+                        rolodex.Add(newLockSpecialist);
+                    }
+                }
+
+                Console.WriteLine("It's time to begin the heist, you lousy criminals!");
+                Random r = new Random();
+                Bank newBank = new Bank(r.Next(0, 101), r.Next(0, 101), r.Next(0, 101), r.Next(50000, 1000001));
+
+                List<int> scores = new List<int>() {
+                    newBank.AlarmScore, newBank.VaultScore, newBank.SecurityGuardScore
+                };
+
+                Console.WriteLine($"Alarm score: {newBank.AlarmScore}; Vault score: {newBank.VaultScore}; SG Score: {newBank.SecurityGuardScore}");
+
+                int alarmScore = scores[0];
+                int vaultScore = scores[1];
+                int sgScore = scores[2];
+
+                Console.WriteLine($"");
+
+                if(alarmScore > vaultScore && alarmScore > sgScore) {
+                    Console.WriteLine("Most secure system: Alarm");
+                }
+                else if(vaultScore > alarmScore && vaultScore > sgScore) {
+                    Console.WriteLine("Most secure system: Vault");
+                }
+                else if(sgScore > vaultScore && sgScore > alarmScore) {
+                    Console.WriteLine("Most secure system: Security Guard");
+                }
+                
+                if(alarmScore < vaultScore && alarmScore < sgScore) {
+                    Console.WriteLine("Least secure system: Alarm");
+                }
+                else if(vaultScore < alarmScore && vaultScore < sgScore) {
+                    Console.WriteLine("Least secure system: Vault");
+                }
+                else if(sgScore < vaultScore && sgScore < alarmScore) {
+                    Console.WriteLine("Least secure system: Security Guard");
+                }
+
+                // Dictionary<string, int> bankScores = new Dictionary<string, int> {
+                //     {"Alarm", newBank.AlarmScore},
+                //     {"Vault", newBank.VaultScore},
+                //     {"Security", newBank.SecurityGuardScore}
+                // };
+
+                // Dictionary<string, int> orderedSecurities = new Dictionary<string, int>();
+                // orderedSecurities = bankScores.OrderBy(key => key.Value).ToDictionary(x => x.Key, x=> x.Value);
+                
+                // Console.WriteLine($"Most secure system: {orderedSecurities.Keys.ElementAt(orderedSecurities.Count - 1)}");
+                // Console.WriteLine($"Least secure system: {orderedSecurities.Keys.ElementAt(0)}");
+
+
           
+
 
         }
     }

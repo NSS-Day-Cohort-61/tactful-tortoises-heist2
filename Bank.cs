@@ -11,8 +11,13 @@ namespace heist
         public int SecurityGuardScore { get; set; }
         public int CashOnHand { get; set; }
 
-        // public int SecurityScore { get; }
-
+        public Bank (int alarm, int vault, int cut, int cash)
+        {
+            AlarmScore = alarm;
+            VaultScore = vault;
+            SecurityGuardScore = cut;
+            CashOnHand = cash;
+        }
 
 
         public bool IsSecure
