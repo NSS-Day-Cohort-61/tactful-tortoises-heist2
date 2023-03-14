@@ -38,8 +38,8 @@ namespace heist
             string nameResponse = " ";
             while (nameResponse.Length > 0)
             {
-                Console.WriteLine(rolodex.Count);
-                Console.WriteLine("Who would you like to add to your crew???");
+                Console.WriteLine($"You have {rolodex.Count} members in your rolodex to choose from.");
+                Console.WriteLine("Add a Robber to your rolodex.");
                 nameResponse = Console.ReadLine();
                 if (nameResponse.Length == 0)
                 {
@@ -83,6 +83,7 @@ namespace heist
             int alarmScore = scores[0];
             int vaultScore = scores[1];
             int sgScore = scores[2];
+            int cutPercentage = 100;
 
             Console.WriteLine($"");
 
@@ -112,27 +113,75 @@ namespace heist
                 Console.WriteLine("Least secure system: Security Guard");
             }
 
-            void PrintRobbers()
+            void PrintRobbers(List<IRobber> robbers, int cutPercentage)
             {
-                foreach (var member in rolodex)
+                if (cutPercentage <= 0)
                 {
-                    Console.WriteLine($"{rolodex.IndexOf(member) + 1}) {member.Name}, a {member.GetType().Name}, skill: {member.SkillLevel}, Cut: {member.PercentageCut}");
+                    Console.WriteLine("You are out of cuts to divvy out");
+                }
+                else
+                {
+
+                    foreach (var member in robbers)
+                    {
+                        if (member.PercentageCut <= cutPercentage)
+                        {
+
+                            Console.WriteLine($"{robbers.IndexOf(member) + 1}) {member.Name}, a {member.GetType().Name}, skill: {member.SkillLevel}, Cut: {member.PercentageCut}");
+                        }
+                    }
                 }
             }
+            // member1 = index 0
+            // member2 = index 1
+            // member3 = index 2
 
-                PrintRobbers();
 
+
+            PrintRobbers(rolodex, cutPercentage);
             List<IRobber> crew = new List<IRobber>();
-            Console.WriteLine("Enter the number of the member you want to add to your crew.");
+            List<int> chosenIndexes = new List<int>();
+            int crewSelection = 0;
+            string crewSelectionResp = "";
 
-            int crewSelection = int.Parse(Console.ReadLine());
-            // look at the selected member in the rolodex and add them to the crew.
-            crew.Add(rolodex[crewSelection - 1]);
+            while (cutPercentage >= 0)
+            {
+
+                Console.WriteLine("Enter the number of the member you want to add to your crew."); // "1" = member1, 
+                crewSelectionResp = Console.ReadLine(); //
+                if (crewSelectionResp.Length == 0)
+                {
+                    break;
+                }
+                crewSelection = int.Parse(crewSelectionResp); //1
+                // foreach(var index in chosenIndexes){
+                //     //check to see if index matches 
+                //     foreach(var rolodexIndex in rolodex){
+
+                //     if (index == ){
+
+                //     }
+                //     }
+                // }
+                crew.Add(rolodex[crewSelection - 1]); //crew [member1]
+                chosenIndexes.Add(crewSelection); // chosenIndexes [1]
+                cutPercentage -= rolodex[crewSelection - 1].PercentageCut;
+                Console.WriteLine($"Your current percent cut left is {cutPercentage}");
+                rolodex.Remove(rolodex[crewSelection - 1]); //rolodex [1, 2]
+                PrintRobbers(rolodex, cutPercentage);
+            }
 
             foreach (var crewmate in crew)
             {
                 Console.WriteLine(crewmate.Name);
             }
+            foreach (var crewmate in chosenIndexes)
+            {
+                Console.WriteLine(crewmate);
+            }
         }
+        //Allow the user to select as many crew members as they'd like from the rolodex
+        //Continue to print out the report after each crew member is selected, but the report should not include operatives that have already been added to the crew
+        //or operatives that require a percentage cut that can't be offered.
     }
 }
