@@ -1,91 +1,45 @@
 ﻿using System;
 using System.Collections.Generic;
 
+
 namespace heist
 {
     class Program
     {
         static void Main(string[] args)
         {
-            List<Member> team = new List<Member>();
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("Let's Plan Your Heist!");
-            Console.ResetColor();
 
-            Console.WriteLine("Please select a Bank difficulty level (50-100):");
-            string bankDifficultyLevelString = Console.ReadLine();
-            Console.WriteLine();
-            int.TryParse(bankDifficultyLevelString, out int userBankDifficultyLevel);
+            // In the Main method, create a List<IRobber> and store it in a variable named rolodex. 
+            // This list will contain all possible operatives that we could employ for 
+            // future heists. We want to give the user the opportunity to add new operatives
+            //  to this list, but for now let's pre-populate the list with 5 or 6 robbers
+            //   (give it a mix of Hackers, Lock Specialists, and Muscle).
 
-            string memberName = "";
-            do
-            {
-                Console.ForegroundColor = ConsoleColor.DarkGreen;
-                Console.WriteLine("Crew Member Name:");
-                Console.ResetColor();
-                memberName = Console.ReadLine();
-                if (memberName == "")
-                {
-                    break;
-                }
+                Hacker James = new Hacker("James", 30, 30);
+                LockSpecialist Laura = new LockSpecialist("Laura", 20, 20);
 
-                Console.WriteLine($"{memberName}'s Skill Level (0-50):");
-                string memberSkillLevelString = Console.ReadLine();
-                int.TryParse(memberSkillLevelString, out int memberSkillLevel);
+                Muscle Paul = new Muscle("Paul", 50, 25 );
+              
+                Hacker Logan = new Hacker("Logan", 40, 10);
+                LockSpecialist Will = new LockSpecialist("Will", 30, 10);
+                Muscle Jenny = new Muscle("Jenny", 40, 20);
 
-                Console.WriteLine($"{memberName}'s Courage Factor (0.0-2.0):");
-                string memberCourageFactorString = Console.ReadLine();
-                double.TryParse(memberCourageFactorString, out double memberCourageFactor);
+                List<IRobber> rolodex = new List<IRobber>()
+                { James, Laura, Paul, Logan, Will, Jenny };
 
-                Member newMember = new Member(memberName, memberSkillLevel, memberCourageFactor);
-                team.Add(newMember);
-                Console.WriteLine();
-            }
-            while (memberName.Length > 0);
-            
-            int teamSkillLevel = 0;
-            foreach (Member member in team)
-            {
-                teamSkillLevel += member.SkillLevel; 
-            }
-             
-            Console.WriteLine("How many trials do you want to run with your current team?:");
-            string trialChoiceString = Console.ReadLine();
-            int.TryParse(trialChoiceString, out int trialChoice);
- 
-            int successfulTrials = 0;
-            int failedTrials = 0;
+                Console.WriteLine(rolodex.Count);
+                Console.WriteLine("Who would you like to add to your crew???");
+                string answer = Console.ReadLine();
+                Console.WriteLine("1.) Hacker (Disables alarms) \n2.)Muscle (Disarms guards) \n3.)Lock Specialist (cracks vault)");
+                int answerTwo = int.Parse(Console.ReadLine());
 
-            Console.WriteLine();
-            Console.WriteLine($"With your current team and a combined Skill Level of {teamSkillLevel}...");
-            for (int i = 0; i < trialChoice; i++)
-            {
-                int bankDifficultyLevel = userBankDifficultyLevel;
-                int LuckValue = new Random().Next(-10, 11);
-                bankDifficultyLevel += LuckValue;
+        //   When the program starts, print out the number of current operatives in the rolodex. 
+        //   Then prompt the user to enter the name of a new possible crew member. 
+        //   Once the user has entered a name, print out a list of possible specialties
+        //    and have the user select which specialty this operative has. The list should
+        //     contain the following options
+          
 
-                Console.WriteLine($"A Heist with a Bank Difficulty Level of {bankDifficultyLevel}...");
-
-                    if ( teamSkillLevel >= bankDifficultyLevel)
-                {
-                    Console.ForegroundColor = ConsoleColor.DarkGreen;
-                    Console.WriteLine($"Would result in SUCCESS");
-                    Console.ResetColor();
-                     successfulTrials++;
-                } 
-                else
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"Would result in JAIL TIME");
-                    Console.ResetColor();
-                     failedTrials++;
-                }       
-            }
-            Console.ForegroundColor = ConsoleColor.DarkBlue;
-            Console.WriteLine();
-            Console.WriteLine($"Successful Runs: {successfulTrials}");
-            Console.WriteLine($"Failed Runs: {failedTrials}");
-            Console.ResetColor();
         }
     }
 }
